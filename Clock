@@ -1,0 +1,67 @@
+import java.util.*;;
+import javax.swing.*;
+import java.awt.*;
+
+
+public class MyPanel extends JPanel
+{
+  public void paintComponent(Graphics g)
+  {  
+  
+  g.setColor(Color.white);
+  g.fillRect(0,0, 400,400);
+   g.setColor(Color.black);
+   g.fillOval(100,50,200,200);
+   g.setColor(Color.white);
+   g.fillOval(110,60,180,180);
+   Font font = new Font("Verdana", Font.BOLD, 20);
+   g.setFont(font);
+   g.setColor(Color.black);
+   g.drawString("12",185,77);
+   g.drawString("6",194,239);
+   g.drawString("9",112,158);
+    g.drawString("3",274,157);
+   g.drawString(".",154,87); //11
+   g.drawString(".",130,117); //10
+   g.drawString(".",130,193); //8
+   g.drawString(".",154,223); //7
+   g.drawString(".",230,87);  // 1  
+   g.drawString(".",263,117); // 2 
+   g.drawString(".",263,193); //4
+   g.drawString(".",230,223); // 5
+   
+  GregorianCalendar time = new GregorianCalendar();
+
+  int minutesangle= 90 - (time.get(GregorianCalendar.MINUTE)* 6);
+  int hoursangle= (90 - (time.get(GregorianCalendar.HOUR)* 30))-(time.get(GregorianCalendar.MINUTE)/2);
+  int secondsangle= 90 - time.get(GregorianCalendar.SECOND)*6;
+
+  
+   g.fillArc(125,75,150,150,secondsangle,3);
+   g.setColor(Color.blue);
+   g.fillArc(140,90,120,120,hoursangle,4);
+   g.setColor(Color.red);
+   g.fillArc(125,75,150,150,minutesangle,4);
+  
+  }
+
+}
+
+import javax.swing.*;
+  
+class Test
+{ 
+    public static void main(String[] args) throws InterruptedException
+                   
+    { 
+    int x = 0;
+     JFrame frame = new JFrame();
+     frame.setSize(400,400);
+     frame.setVisible(true);
+    while(x<100){
+     frame.getContentPane().add(new MyPanel());
+      frame.repaint(1000,0,0,400,400);
+      }
+      
+    } 
+} 
