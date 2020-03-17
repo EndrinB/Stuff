@@ -5,9 +5,10 @@ public class Database{
    HashMap<Integer,User> database = new HashMap<Integer,User>();
    static File server = new File("database.txt"); 
    FileWriter writer;
+   int key;
    Database()
    {
-      int key = 1;
+      key = 1;
       try{
          Scanner scan = new Scanner(server);
          while(scan.hasNextLine()){
@@ -26,8 +27,17 @@ public class Database{
       return user;
    }
    public void addUser(String name,String password){
-                 
-
-      }
+    
+      try{
+         writer = new FileWriter(server,true);
+         writer.write(name + " " + password +"\n");
+         
+         writer.flush();
+         writer.close();
+         
+         writer = new FileWriter("messages.txt",true);
+         writer.write(key + " ");
+      }catch(Exception e){}
    }
 }
+
