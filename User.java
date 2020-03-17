@@ -4,16 +4,20 @@ public class User{
    private String name;
    private String password;
    private int key;
-   private List<String> messages = new ArrayList<>();
+   Message msg ;
+   private List<String> messages;
    
    User(String name,String password,int key){
       this.name = name;
       this.password = password;
       this.key = key;
+      msg = new Message(key);
+      messages = msg.getMessages();
+      
    }
    
    public void addMessage(String message){
-      messages.add(message);
+      messages.add(msg.addMessage(message));
    }
    
    public void removeMessage(int msgNum){
