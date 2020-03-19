@@ -2,14 +2,15 @@ import java.io.*;
 import java.util.*;
 
 public class Message{
-   File messages = new File("messages.txt");
-   Scanner scan;
-   int key;
-   FileWriter writer;
+   private File messages = new File("messages.txt");
+   private Scanner scan;
+   private int key;
+   private FileWriter writer;
    
-   Message(int key){
+   public Message(int key){
       this.key = key;
    }
+   
    public List<String> getMessages(){
       List<String> msg = new ArrayList<>();
       try{
@@ -19,11 +20,11 @@ public class Message{
                while(!scan.hasNextInt()){
                   msg.add(scan.next());
                }
-            }else{
+            } else {
                scan.nextLine();
             }
-            scan.close();
             
+            scan.close();
          }
       }catch(Exception e){}
       return msg;
@@ -47,6 +48,7 @@ public class Message{
       }catch(Exception e){}
       return message;
    }
+   
    public String removeMessage(int num){
           String message = "";     
       try{
