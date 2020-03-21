@@ -3,52 +3,82 @@ import java.util.*;
 
 public class Message{
    File messages = new File("messages.txt");
+   MessageHandler msg;
    Scanner scan;
    int key;
    FileWriter writer;
    
-   Message(int key){
+   Message(int key,boolean created){
       this.key = key;
+      
+      
+      if(created){}
+      else{
+         try{
+            writer = new FileWriter(messages,true);
+            BufferedWriter bw = new BufferedWriter(writer);
+            PrintWriter pw = new PrintWriter(bw);
+            pw.print(key + ",\n");
+            
+            pw.flush();
+            pw.close();         
+         }
+         catch(Exception e){}
+      }
    }
    public List<String> getMessages(){
       List<String> msg = new ArrayList<>();
       try{
          scan = new Scanner(messages);
          while(scan.hasNextLine()){
-            if(key == Integer.parseInt(scan.next())){
-               while(!scan.hasNextInt()){
-                  msg.add(scan.next());
-               }
-            }else{
-               scan.nextLine();
+            String s = scan.nextLine()+"";
+            String k = s.charAt(0)+"";
+            if(key == Integer.parseInt(k)){
+               s = s.substring(2);
+               String[] msgs = s.split(",");
+               int count = 0;
+               while(count < msgs.length){
+                  msg.add(msgs[count]);
+                  count++;
+               }            
             }
-            scan.close();
-            
+         
          }
+         
       }catch(Exception e){}
+      scan.close();
       return msg;
    }
-   public String addMessage(String message){
-               
-      try{
+   public String addMessage(String message){               
+      List<String> lines = new ArrayList<>();
+      try{ 
          scan = new Scanner(messages);
          while(scan.hasNextLine()){
-            if(key == Integer.parseInt(scan.next())){
-               writer = new FileWriter(messages,true);
-               writer.write(" " + message + " ");
-            
-               writer.flush();
-               writer.close();
-            }
-            else{
-               scan.nextLine();
+            String line = scan.nextLine();
+            String k = line.charAt(0)+"";
+            if(Integer.parseInt(k) == key){
+               lines.add(line + message + ",");
+            }else{
+               lines.add(line);
             }
          }
+         writer = new FileWriter(messages,false);
+         BufferedWriter bw = new BufferedWriter(writer);
+         PrintWriter pw = new PrintWriter(bw);
+         int count = 0;
+         while(count < lines.size()){
+            pw.println(lines.get(count));
+            count++;
+         }
+         pw.flush();
+         pw.close();
+         scan.close();
       }catch(Exception e){}
       return message;
    }
+
    public String removeMessage(int num){
-          String message = "";     
+      String message = "";     
       try{
          scan = new Scanner(messages);
          while(scan.hasNextLine()){
