@@ -19,8 +19,8 @@ public class Database{
       try{
          server = new File("database.txt");
          Scanner scan = new Scanner(server);
-         scan.useDelimiter("[,\n]");
-         while(scan.hasNext()){
+         scan.useDelimiter("[,]");
+         while(scan.hasNextLine()){
             User user = new User(scan.next(),scan.next(),key);
             database.put(key,user);
             userNames.add(user.getName());
@@ -58,7 +58,7 @@ public class Database{
             BufferedWriter bw = new BufferedWriter(writer);
             PrintWriter pw = new PrintWriter(bw);
          
-            pw.println(name + "," + password);
+            pw.println("," + name + "," + password);
             key++;
             pw.flush();
             pw.close();
@@ -84,7 +84,7 @@ public class Database{
             BufferedWriter bw = new BufferedWriter(wr);
             PrintWriter pw = new PrintWriter(bw);
             while(count <= userNames.size()-1){
-               pw.print(userNames.get(count) + "," + userPass.get(count));
+               pw.print("," + userNames.get(count) + "," + userPass.get(count));
                count++;
             }
             pw.flush();
