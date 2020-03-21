@@ -9,6 +9,7 @@ public class Database{
    HashMap<Integer,User> database = new HashMap<Integer,User>();
    private LinkedList<String> userNames = new LinkedList();
    private LinkedList<String> userPass = new LinkedList();
+   private MessageHandler msgHandler;
    static File server; 
    FileWriter writer;
    int key = 1;
@@ -17,15 +18,18 @@ public class Database{
    Database()
    {
       try{
+         msgHandler = new MessageHandler();
          server = new File("database.txt");
          Scanner scan = new Scanner(server);
-         scan.useDelimiter("[,]");
+         scan.useDelimiter("[, \n]");
          while(scan.hasNextLine()){
-            User user = new User(scan.next(),scan.next(),key);
-            database.put(key,user);
+            int keys = scan.nextInt();
+            User user = new User(scan.next(),scan.next(),keys,msgHandler.containsMsgKey(keys));
+            database.put(keys,user);
             userNames.add(user.getName());
             userPass.add(user.getPassword());
-            key++;
+            key = user.getTotalUsers()+1;
+
          }
          scan.close();
           
@@ -57,8 +61,11 @@ public class Database{
             writer = new FileWriter(server,true);
             BufferedWriter bw = new BufferedWriter(writer);
             PrintWriter pw = new PrintWriter(bw);
-         
-            pw.println("," + name + "," + password);
+            User user = new User(name,password,key,false);
+            pw.println(key +"," + name + "," + password);
+            database.put(key,user);
+            userNames.add(name);
+            userPass.add(password);
             key++;
             pw.flush();
             pw.close();
@@ -74,21 +81,19 @@ public class Database{
       if(!database.containsKey(key)){System.out.println("User not found");}
       else{
             int count = 0;
-            int rem = userNames.indexOf(database.get(key).getName());
-            userNames.remove(database.get(key).getName()); 
-            userPass.remove(rem); 
             database.remove(key);
-          
+            Set<Integer> keys = database.keySet();
+            Integer[] array = keys.toArray(new Integer[keys.size()]);  
          try{
             FileWriter wr = new FileWriter(server,false);
             BufferedWriter bw = new BufferedWriter(wr);
             PrintWriter pw = new PrintWriter(bw);
-            while(count <= userNames.size()-1){
-               pw.print("," + userNames.get(count) + "," + userPass.get(count));
+            while(count <= keys.size()-1){
+               wr.write(0+array[count] +","+ database.get(array[count]).getName() + "," + database.get(array[count]).getPassword());
                count++;
             }
-            pw.flush();
-            pw.close();
+            wr.flush();
+            wr.close();
          
          
          }catch(Exception e){}
