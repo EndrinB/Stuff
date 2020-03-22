@@ -8,9 +8,8 @@ import java.io.*;
 public class Database{
    HashMap<Integer,User> database = new HashMap<Integer,User>();
    private LinkedList<String> userNames = new LinkedList();
-   private LinkedList<String> userPass = new LinkedList();
    private MessageHandler msgHandler;
-   static File server; 
+   static File server;
    FileWriter writer;
    int key = 1;
    
@@ -22,13 +21,14 @@ public class Database{
          server = new File("database.txt");
          Scanner scan = new Scanner(server);
          scan.useDelimiter("[, \n]");
-         while(scan.hasNextLine()){
-            int keys = scan.nextInt();
-            User user = new User(scan.next(),scan.next(),keys,msgHandler.containsMsgKey(keys));
+         while(scan.hasNext()){
+            int keys = Integer.parseInt(scan.next());
+            String name = scan.next();
+            String password = scan.next();
+            User user = new User(name,password,keys,msgHandler.containsMsgKey(keys));
             database.put(keys,user);
-            userNames.add(user.getName());
-            userPass.add(user.getPassword());
-            key = user.getTotalUsers()+1;
+            userNames.add(name);
+            if(this.key <= keys){ this.key = keys + 1;}
 
          }
          scan.close();
@@ -62,10 +62,9 @@ public class Database{
             BufferedWriter bw = new BufferedWriter(writer);
             PrintWriter pw = new PrintWriter(bw);
             User user = new User(name,password,key,false);
-            pw.println(key +"," + name + "," + password);
+            pw.print(key +"," + name + "," + password + "\n");
             database.put(key,user);
             userNames.add(name);
-            userPass.add(password);
             key++;
             pw.flush();
             pw.close();
@@ -84,16 +83,17 @@ public class Database{
             database.remove(key);
             Set<Integer> keys = database.keySet();
             Integer[] array = keys.toArray(new Integer[keys.size()]);  
+            msgHandler.userRemoved(array,key);
          try{
             FileWriter wr = new FileWriter(server,false);
             BufferedWriter bw = new BufferedWriter(wr);
             PrintWriter pw = new PrintWriter(bw);
             while(count <= keys.size()-1){
-               wr.write(0+array[count] +","+ database.get(array[count]).getName() + "," + database.get(array[count]).getPassword());
+               pw.print(0+array[count] +","+ database.get(array[count]).getName() + "," + database.get(array[count]).getPassword() + "\n");
                count++;
             }
-            wr.flush();
-            wr.close();
+            pw.flush();
+            pw.close();
          
          
          }catch(Exception e){}
