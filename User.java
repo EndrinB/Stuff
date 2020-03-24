@@ -23,8 +23,8 @@ public class User{
    }
    
    public void removeMessage(int msgNum){
-      if(messages.size() > msgNum && msgNum >= 0) { 
-         messages.remove(msgNum);
+      if(messages.size() >= msgNum && msgNum > 0) { 
+         messages.remove(msg.removeMessage(msgNum));
       }
    }
    
@@ -32,7 +32,7 @@ public class User{
       if (messages.size() > msgNum && msgNum >= 0) {
            return messages.get(msgNum);
       }
-      return "This index ("+msg+") exceeds the size of the messages list";
+      return "This index ("+msgNum+") exceeds the size of the messages list";
    }
    
    public int getMsgCount(){
