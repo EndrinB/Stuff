@@ -1,6 +1,6 @@
 
 
-public class Help{
+public class RunApplication{
  
    public static void main(String[] a){
     Database c = new Database();
