@@ -87,6 +87,7 @@ public class LoginPlatform extends JPanel implements MouseListener{
        if(manager.loginUser(name.getText(),password.getPassword())){
          removeLogin();
          frame.setVisible(false);
+         frame.dispose();
          new MailBox(manager.getUserLogged(),frame,manager.data);
          frame.repaint();
        }
@@ -97,8 +98,16 @@ public class LoginPlatform extends JPanel implements MouseListener{
      }
      if((e.getX()>= 442 && e.getX() <= 614) && (e.getY() >= 335 && e.getY() <= 400)){
        mouseOverSignUp = true;
+       if((new String(password.getPassword()).length() >= 8) && name.getText().length() >= 3){
        nameTaken = manager.signUser(name.getText(),password.getPassword());
        frame.repaint();
+       }
+       else if(!(new String(password.getPassword()).length() >= 8) && name.getText().length() >= 3){
+       JOptionPane.showMessageDialog(null,"Password too short");
+     }
+       else {
+       JOptionPane.showMessageDialog(null,"User name too short");
+       }
      }
      else{
        mouseOverSignUp = false;
